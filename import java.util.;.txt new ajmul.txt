@@ -1,0 +1,220 @@
+ import java.util.*; 
+   
+           abstract class Person { 
+       
+          protected String name; 
+   
+        public Person(String name) { 
+             
+        this.name = name; 
+    } 
+ 
+    public abstract void displayRole(); 
+} 
+ 
+class Customer extends Person { 
+     
+    public Customer(String name) { 
+        super(name); 
+    } 
+ 
+    public void displayRole() { 
+          System.out.println(name + " is a Customer"); 
+    } 
+} 
+ 
+      class Staff extends Person { 
+       public Staff(String name) { 
+            
+        super(name); 
+    } 
+ 
+    public void displayRole() { 
+        System.out.println(name + " is Staff"); 
+    } 
+} 
+ 
+class Room { 
+    private int roomNumber; 
+    private boolean booked; 
+     
+    private Person person; 
+ 
+    public Room(int roomNumber) { 
+         
+        this.roomNumber = roomNumber; 
+         
+        this.booked = false; 
+    } 
+ 
+    public int getRoomNumber() { 
+        return roomNumber; 
+    } 
+ 
+    public boolean isBooked() { 
+        return booked; 
+    } 
+ 
+    public void book(Person person) { 
+        this.person = person; 
+        this.booked = true; 
+    } 
+ 
+    public void checkout() { 
+        this.person = null; 
+        this.booked = false; 
+    } 
+ 
+    public void showDetails() { 
+         
+        if (booked) { 
+             
+            System.out.print("Room " + roomNumber + " - Booked by "); 
+            person.displayRole(); 
+             
+        } else { 
+             
+            System.out.println("Room " + roomNumber + " - Available"); 
+        } 
+    } 
+} 
+ 
+class Hotel { 
+     
+    private List<Room> rooms = new ArrayList<>(); 
+ 
+    public Hotel(int totalRooms) { 
+         
+        for (int i = 1; i <= totalRooms; i++) { 
+             
+            rooms.add(new Room(i)); 
+        } 
+    } 
+ 
+    public void showRooms() { 
+         
+        for (Room r : rooms) { 
+            r.showDetails(); 
+        } 
+    } 
+ 
+    public void bookRoom(int roomNumber, Person person) { 
+        for (Room r : rooms) { 
+             
+            if (r.getRoomNumber() == roomNumber) { 
+                 
+                if (!r.isBooked())  
+                { 
+                    r.book(person); 
+                     
+                    System.out.println("Booked Successfully"); 
+                } else { 
+                    System.out.println("Already Booked"); 
+                } 
+                return; 
+            } 
+        } 
+        System.out.println("Room Not Found"); 
+    } 
+ 
+    public void checkoutRoom(int roomNumber) { 
+         
+        for (Room r : rooms) { 
+             
+            if (r.getRoomNumber() == roomNumber) { 
+                if (r.isBooked()) { 
+                     
+                    r.checkout(); 
+                     
+                    System.out.println("Checkout Done"); 
+                } else { 
+                    System.out.println("Room Empty"); 
+                } 
+                return; 
+            } 
+        } 
+        System.out.println("Room Not Found"); 
+    } 
+} 
+ 
+public class Main { 
+     
+    public static void main(String[] args) { 
+         
+        Scanner sc = new Scanner(System.in); 
+         
+        Hotel hotel = new Hotel(5); 
+         
+ 
+        while (true) { 
+             
+            System.out.println("\n1. Show Rooms"); 
+             
+            System.out.println("2. Book as Customer"); 
+             
+            System.out.println("3. Book as Staff"); 
+             
+            System.out.println("4. Checkout"); 
+             
+            System.out.println("5. Exit"); 
+             
+            System.out.print("Choice: "); 
+ 
+            int choice = sc.nextInt(); 
+             
+            sc.nextLine(); 
+ 
+            if (choice == 1) { 
+                 
+                hotel.showRooms(); 
+                 
+            } else if (choice == 2) { 
+                 
+                System.out.print("Room Number: "); 
+                 
+                int r = sc.nextInt(); 
+                 
+                sc.nextLine(); 
+                 
+                System.out.print("Name: "); 
+                 
+                String name = sc.nextLine(); 
+                 
+                hotel.bookRoom(r, new Customer(name)); 
+                 
+            } else if (choice == 3) { 
+                 
+                System.out.print("Room Number: "); 
+                 
+                int r = sc.nextInt(); 
+                 
+                sc.nextLine(); 
+                 
+                System.out.print("Name: "); 
+                 
+                String name = sc.nextLine(); 
+                 
+                hotel.bookRoom(r, new Staff(name)); 
+                 
+            } else if (choice == 4) { 
+                 
+                System.out.print("Room Number: "); 
+                 
+                int r = sc.nextInt(); 
+                 
+                 
+                hotel.checkoutRoom(r); 
+                 
+            } else if (choice == 5) { 
+                 
+                break; 
+                 
+            } else { 
+                System.out.println("Invalid Choice"); 
+            } 
+        } 
+   
+    
+    } 
+     
+} 
